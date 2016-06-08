@@ -1,9 +1,14 @@
+import java.awt.Dimension;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 import java.sql.ResultSet;
 
@@ -36,7 +41,7 @@ public class JDBCExample {
 			source.setDatabaseName("postgres");
 			source.setPortNumber(5432);
 			source.setUser("postgres");
-			source.setPassword("Eltinto"); 
+			source.setPassword("Eltinto66"); 
 			source.setMaxConnections(10);
 			
 			connection = source.getConnection();
@@ -46,16 +51,46 @@ public class JDBCExample {
 			//
 			
 			JFrame mainFrame = new JFrame(" JDBC Update Example");
+			mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			
-			ResultSet myResult = orderSELECT.executeQuery("SELECT bpart_code, bpart_description FROM bp_articles ");
-			while  (myResult.next()) {
+			Object[][] data = new Object[0][3];
+			String[] columnNames = {"Article code",
+                    "Article description",
+                    "quantite"};
+
+			ResultSet myResult = orderSELECT.executeQuery("SELECT bpart_code, bpart_description, bpart_qte FROM bp_articles ");
+			int r=0;
+			JTable table = new JTable(new DefaultTableModel(data, columnNames));
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
+			
+			while  (myResult.next() ) {
+				
 				String code = myResult.getString("bpart_code");
 				String description = myResult.getString("bpart_description");
-				
-				JOptionPane.showMessageDialog(mainFrame, " Resultat => Code : " + code + " Description : "+description);
+				Integer quantite = myResult.getInt("bpart_qte");
+								 
+				model.addRow(new Object[]{code, description, quantite});
+
+				//JOptionPane.showMessageDialog(mainFrame, " Resultat => Code : " + code + " Description : "+description);
 				
 			}
-			
+						
+			table.setPreferredScrollableViewportSize(new Dimension(500, 70));
+		    table.setFillsViewportHeight(true);
+		    
+		    //Create the scroll pane and add the table to it.
+	        JScrollPane scrollPane = new JScrollPane(table);
+	        
+	        JPanel newContentPane = new JPanel();
+	        newContentPane.add(scrollPane);
+	        
+	        newContentPane.setOpaque(true); //content panes must be opaque
+	        mainFrame.setContentPane(newContentPane);
+	        
+	        //Display the window.
+	        mainFrame.pack();
+	        mainFrame.setVisible(true);
+	        
 			//Close ResultSet, Statement and connection
 			myResult.close();
 			orderSELECT.close();
