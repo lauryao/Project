@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JPanel;
@@ -41,7 +40,7 @@ public class JDBCExample {
 			source.setDatabaseName("postgres");
 			source.setPortNumber(5432);
 			source.setUser("postgres");
-			source.setPassword("Eltinto66"); 
+			source.setPassword("xxxxxxxx"); 
 			source.setMaxConnections(10);
 			
 			connection = source.getConnection();
